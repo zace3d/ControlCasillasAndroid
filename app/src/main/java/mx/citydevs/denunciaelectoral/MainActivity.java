@@ -1,19 +1,29 @@
 package mx.citydevs.denunciaelectoral;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import mx.citydevs.denunciaelectoral.beans.ComplaintType;
+import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
+import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
+import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
 /**
  * Created by zace3d on 5/26/15.
  */
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+    public static final String TAG_CLASS = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +32,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         setSupportActionBar();
         initUI();
+
+        GetDenunciasTypesPublicationsAsyncTask task = new GetDenunciasTypesPublicationsAsyncTask();
+        task.execute();
     }
 
     protected void setSupportActionBar() {
@@ -81,5 +94,34 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void startCiudadanoIntent() {
         Intent intent = new Intent();
         startActivity(intent);
+    }
+
+    private class GetDenunciasTypesPublicationsAsyncTask extends AsyncTask<String, String, String> {
+        public GetDenunciasTypesPublicationsAsyncTask() {}
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected String doInBackground(String... params) {
+            return HttpConnection.POST(HttpConnection.URL + HttpConnection.TYPES);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Dialogues.Log(TAG_CLASS, "Result: " + result, Log.INFO);
+
+            if (result != null) {
+                try {
+                    ArrayList<ComplaintType> listComplaintsTypes = (ArrayList<ComplaintType>) GsonParser.getListComplaintsTypesFromJSON(result);
+
+                    if (listComplaintsTypes != null && listComplaintsTypes.size() > 0) {
+                        Dialogues.Toast(getBaseContext(), listComplaintsTypes.size() + " Result: " + result, Toast.LENGTH_LONG);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

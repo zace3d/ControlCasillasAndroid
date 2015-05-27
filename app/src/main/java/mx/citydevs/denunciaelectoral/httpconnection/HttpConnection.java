@@ -1,5 +1,6 @@
 package mx.citydevs.denunciaelectoral.httpconnection;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -56,21 +57,20 @@ public class HttpConnection {
 		return result;
 	}
 
-	public static String POST(String url, String json) {
+	public static String POST(String url) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(url);
 		
 		String result = null;
 		
 		try {
-			// httpPost.setEntity(new StringEntity(json));
-			httpPost.setEntity(createStringEntity(json));
-		    httpPost.setHeader("Accept", "application/json");
-		    httpPost.setHeader("Content-Type", "application/json");
-			
-			// httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, HTTP.UTF_8));
-			// httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-			
+			//httpPost.setEntity(createStringEntity(json));
+		    //httpPost.setHeader("Accept", "application/json");
+		    //httpPost.setHeader("Content-Type", "application/json");
+
+			String authorizationString = getB64Auth("", "");
+			httpPost.setHeader("Authorization", authorizationString);
+
 			HttpResponse response = httpClient.execute(httpPost);
 			Dialogues.Log(TAG_CLASS, "Http Post Response:" + response.toString(), Log.DEBUG);
 			
@@ -90,7 +90,12 @@ public class HttpConnection {
 		
 		return result;
 	}
-	
+
+	private static String getB64Auth(String user, String pass) {
+		String source = user + ":" + pass;
+		return "Basic " + Base64.encodeToString(source.getBytes(), Base64.URL_SAFE | Base64.NO_WRAP);
+	}
+
 	private static HttpEntity createStringEntity(String json) {
 		StringEntity se = null;
 		try {
