@@ -1,9 +1,11 @@
 package mx.citydevs.denunciaelectoral.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by zace3d on 5/27/15.
  */
-public class ComplaintType {
+public class ComplaintType implements Serializable {
     private long id;
     private String name;
     private String description;
@@ -68,8 +70,8 @@ public class ComplaintType {
         this.category = category;
     }
 
-    public class Category {
-        private long id;
+    public class Category implements Serializable {
+    private long id;
         private String name;
         private String description;
         private boolean is_active;

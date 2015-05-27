@@ -24,6 +24,7 @@ import mx.citydevs.denunciaelectoral.views.CustomTextView;
  */
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public static final String TAG_CLASS = MainActivity.class.getSimpleName();
+    private ArrayList<ComplaintType> listComplaintsTypes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     protected void startCiudadanoIntent() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(getBaseContext(), ComplaintActivity.class);
+        intent.putExtra(ComplaintActivity.COMPLAINTS_TYPES, listComplaintsTypes);
         startActivity(intent);
     }
 
@@ -113,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             if (result != null) {
                 try {
-                    ArrayList<ComplaintType> listComplaintsTypes = (ArrayList<ComplaintType>) GsonParser.getListComplaintsTypesFromJSON(result);
+                    listComplaintsTypes = (ArrayList<ComplaintType>) GsonParser.getListComplaintsTypesFromJSON(result);
 
                     if (listComplaintsTypes != null && listComplaintsTypes.size() > 0) {
                         Dialogues.Toast(getBaseContext(), listComplaintsTypes.size() + " Result: " + result, Toast.LENGTH_LONG);

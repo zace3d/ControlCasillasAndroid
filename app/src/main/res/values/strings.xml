@@ -4,6 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="label_un_ciudadano">Un ciudadano:</string>
+    <string name="label_un_funcionario">Un funcionario:</string>
+    <string name="label_un_candidato">Un candidato:</string>
+
     <string name="label_ciudadano">Ciudadano</string>
     <string name="label_funcionario">Funcionario</string>
     <string name="label_candidato">Candidato</string>
