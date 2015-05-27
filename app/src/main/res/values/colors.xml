@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+rosa: R255 G64 B129 #FF4081
+background: R236 G239 B241 #ECEFF1
+bar: R55 G71 B79 #37474F
+APP ICON BG: R84 G110 B122 #546E7A -->
+    <color name="colorPrimary">#37474F</color>
+    <color name="colorPrimaryDark">#37474F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorBgrIcons">#546E7A</color>
+
+    <color name="colorBgr">#ECEFF1</color>
+</resources>
