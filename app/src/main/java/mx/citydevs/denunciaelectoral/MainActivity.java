@@ -81,19 +81,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_btn_ciudadano:
-                startCiudadanoIntent(CategoriesType.CIUDADANO_ID);
+                startListComplaintsIntent(CategoriesType.CIUDADANO_ID);
                 break;
             case R.id.main_btn_funcionario:
-                startCiudadanoIntent(CategoriesType.FUNCIONARIO_ID);
+                startListComplaintsIntent(CategoriesType.FUNCIONARIO_ID);
                 break;
             case R.id.main_btn_candidato:
-                startCiudadanoIntent(CategoriesType.CANDIDATO_ID);
+                startListComplaintsIntent(CategoriesType.CANDIDATO_ID);
                 break;
             default:
         }
     }
 
-    protected void startCiudadanoIntent(int categoryId) {
+    protected void startListComplaintsIntent(int categoryId) {
         Intent intent = new Intent(getBaseContext(), ComplaintsListActivity.class);
         intent.putExtra(ComplaintsListActivity.COMPLAINTS_TYPES, listComplaintsTypes);
         intent.putExtra(ComplaintsListActivity.CATEGORY_ID, categoryId);

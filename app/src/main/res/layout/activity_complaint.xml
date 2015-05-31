@@ -1,7 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBgr">
 
-</LinearLayout>
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/container"
+        android:layout_below="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <mx.citydevs.denunciaelectoral.views.CustomTextView
+                android:id="@+id/complaint_tv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorAccent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:padding="15dp"
+                app:typeface="Akkurat" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <mx.citydevs.denunciaelectoral.views.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_about"
+                    android:textColor="@color/colorBgrIcons"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp"
+                    app:typeface="Akkurat" />
+
+                <ImageView
+                    android:id="@+id/complaint_btn_moreinfo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/selector_item"
+                    android:src="@android:drawable/ic_menu_info_details" />
+            </LinearLayout>
+
+            <mx.citydevs.denunciaelectoral.views.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_more_info"
+                android:textColor="@color/colorBgrIcons"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                app:typeface="Akkurat" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp" />
+
+            <RelativeLayout
+                android:id="@+id/complaint_btn_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:background="@drawable/selector_btn">
+
+                <mx.citydevs.denunciaelectoral.views.CustomTextView
+                    android:id="@+id/complaint_tv_camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_attach_image"
+                    android:textColor="@color/colorBgrIcons"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    app:typeface="Akkurat" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignTop="@+id/complaint_tv_camera"
+                    android:layout_alignBottom="@+id/complaint_tv_camera"
+                    android:layout_alignParentRight="true"
+                    android:src="@android:drawable/ic_menu_camera"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <mx.citydevs.denunciaelectoral.views.CustomTextView
+                    android:id="@+id/complaint_btn_skip"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/label_enter"
+                    android:background="@drawable/selector_btn"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorAccent"
+                    android:padding="15dp"
+                    app:typeface="BrauerNeue_Regular" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

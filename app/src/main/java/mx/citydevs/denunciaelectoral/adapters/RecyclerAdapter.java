@@ -81,7 +81,7 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.Recyc
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         if (holder.holderId == 1) {
-            holder.description.setText(items.get(position - 1).getDescription());
+            holder.description.setText(items.get(position - 1).getName());
 
         } else if (holder.holderId == TYPE_HEADER) {
             if (items.get(position).getCategory() != null) {

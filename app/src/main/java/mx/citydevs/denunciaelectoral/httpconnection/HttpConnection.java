@@ -70,7 +70,7 @@ public class HttpConnection {
 		    //httpPost.setHeader("Accept", "application/json");
 		    //httpPost.setHeader("Content-Type", "application/json");
 
-			String authorizationString = getB64Auth("edgar", "123456");
+			String authorizationString = getB64Auth("", "");
 			httpPost.setHeader("Authorization", authorizationString);
 
 			HttpResponse response = httpClient.execute(httpPost);

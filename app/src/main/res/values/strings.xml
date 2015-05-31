@@ -16,4 +16,8 @@
 
     <string name="label_enter">CONTINUAR</string>
     <string name="label_about">Denuncia Electoral permite a cualquier votante en el país, enviar de manera confidencial, información sobre delitos electorales cometidos por candidatos o partidos, funcionarios electorales o ciudadanos en los lugares de votacióno en sus alrededores.</string>
+
+    <string name="label_more_info">Explica un poco más:</string>
+
+    <string name="label_attach_image">Adjunta una imagen</string>
 </resources>

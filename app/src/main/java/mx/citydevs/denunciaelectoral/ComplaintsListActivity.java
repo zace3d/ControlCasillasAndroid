@@ -1,5 +1,6 @@
 package mx.citydevs.denunciaelectoral;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,6 +26,7 @@ public class ComplaintsListActivity extends ActionBarActivity {
 
     public static final String COMPLAINTS_TYPES = "complaints_types";
     public static final String CATEGORY_ID = "category_id";
+    private List<ComplaintType> listComplaintsTypes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class ComplaintsListActivity extends ActionBarActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            List<ComplaintType> listComplaintsTypes = (List<ComplaintType>) bundle.getSerializable(COMPLAINTS_TYPES);
+            listComplaintsTypes = (List<ComplaintType>) bundle.getSerializable(COMPLAINTS_TYPES);
             int categoryId = bundle.getInt(CATEGORY_ID);
 
             if (listComplaintsTypes != null && listComplaintsTypes.size() > 0)
@@ -55,7 +57,7 @@ public class ComplaintsListActivity extends ActionBarActivity {
     }
 
     protected void initUI(List<ComplaintType> listComplaintsTypes, int categoryId) {
-        RecyclerView mRecyclerList = (RecyclerView) findViewById(R.id.complaint_recycler);
+        RecyclerView mRecyclerList = (RecyclerView) findViewById(R.id.listcomplaints_recycler);
         //mRecyclerList.setHasFixedSize(true);
         mRecyclerList.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerList.setItemAnimator(new DefaultItemAnimator());
@@ -65,9 +67,15 @@ public class ComplaintsListActivity extends ActionBarActivity {
         drawerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Dialogues.Toast(getBaseContext(), "Position: " + position, Toast.LENGTH_SHORT);
+                startComplaintIntent(position);
             }
         });
         mRecyclerList.setAdapter(drawerAdapter);
+    }
+
+    protected void startComplaintIntent(int position) {
+        Intent intent = new Intent(getBaseContext(), ComplaintActivity.class);
+        intent.putExtra(ComplaintActivity.COMPLAINT, listComplaintsTypes.get(position));
+        startActivity(intent);
     }
 }

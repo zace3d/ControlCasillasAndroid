@@ -12,6 +12,8 @@ APP ICON BG: R84 G110 B122 #546E7A -->
     <color name="colorPrimary300">#90A4AE</color>
     <color name="colorPrimary100">#CFD8DC</color>
 
+    <color name="colorTextContent">#333</color>
+
     <color name="colorWhite">#FFFFFF</color>
 
     <color name="colorBgrIcons">#546E7A</color>
