@@ -7,10 +7,12 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -68,15 +70,15 @@ public class HttpConnection {
 		    //httpPost.setHeader("Accept", "application/json");
 		    //httpPost.setHeader("Content-Type", "application/json");
 
-			String authorizationString = getB64Auth("", "");
+			String authorizationString = getB64Auth("edgar", "123456");
 			httpPost.setHeader("Authorization", authorizationString);
 
 			HttpResponse response = httpClient.execute(httpPost);
 			Dialogues.Log(TAG_CLASS, "Http Post Response:" + response.toString(), Log.DEBUG);
 			
 			HttpEntity httpEntity = response.getEntity();
-			
-			result = EntityUtils.toString(httpEntity);
+
+			result = EntityUtils.toString(httpEntity, HTTP.UTF_8);
 			
 			Dialogues.Log(TAG_CLASS, result, Log.ERROR);
 			

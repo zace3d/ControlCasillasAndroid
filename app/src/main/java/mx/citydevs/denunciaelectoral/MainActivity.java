@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import mx.citydevs.denunciaelectoral.beans.CategoriesType;
 import mx.citydevs.denunciaelectoral.beans.ComplaintType;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
@@ -80,21 +81,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_btn_ciudadano:
-                startCiudadanoIntent();
+                startCiudadanoIntent(CategoriesType.CIUDADANO_ID);
                 break;
             case R.id.main_btn_funcionario:
-                startCiudadanoIntent();
+                startCiudadanoIntent(CategoriesType.FUNCIONARIO_ID);
                 break;
             case R.id.main_btn_candidato:
-                startCiudadanoIntent();
+                startCiudadanoIntent(CategoriesType.CANDIDATO_ID);
                 break;
             default:
         }
     }
 
-    protected void startCiudadanoIntent() {
-        Intent intent = new Intent(getBaseContext(), ComplaintActivity.class);
-        intent.putExtra(ComplaintActivity.COMPLAINTS_TYPES, listComplaintsTypes);
+    protected void startCiudadanoIntent(int categoryId) {
+        Intent intent = new Intent(getBaseContext(), ComplaintsListActivity.class);
+        intent.putExtra(ComplaintsListActivity.COMPLAINTS_TYPES, listComplaintsTypes);
+        intent.putExtra(ComplaintsListActivity.CATEGORY_ID, categoryId);
         startActivity(intent);
     }
 

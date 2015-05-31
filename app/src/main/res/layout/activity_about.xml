@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:orientation="vertical"
+        android:layout_below="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="10">
+
+        <ImageView
+            android:id="@+id/about_iv_icon"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_about" />
+
+        <mx.citydevs.denunciaelectoral.views.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/about_iv_icon"
+            android:layout_above="@+id/about_vg_skip"
+            android:text="@string/label_about"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="15dp"
+            app:typeface="Akkurat" />
+
+        <LinearLayout
+            android:id="@+id/about_vg_skip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <mx.citydevs.denunciaelectoral.views.CustomTextView
+                android:id="@+id/about_btn_skip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/label_enter"
+                android:background="@drawable/selector_btn"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorAccent"
+                android:padding="15dp"
+                app:typeface="BrauerNeue_Regular" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

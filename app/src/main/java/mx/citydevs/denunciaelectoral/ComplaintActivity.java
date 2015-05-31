@@ -2,41 +2,32 @@ package mx.citydevs.denunciaelectoral;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Toast;
 
-import java.util.List;
-
-import mx.citydevs.denunciaelectoral.adapters.RecyclerAdapter;
 import mx.citydevs.denunciaelectoral.beans.ComplaintType;
-import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
 /**
- * Created by zace3d on 5/27/15.
+ * Created by zace3d on 5/31/15.
  */
 public class ComplaintActivity extends ActionBarActivity {
-    public static final String TAG_CLASS = ComplaintActivity.class.getSimpleName();
+    public static final String TAG_CLASS = ComplaintsListActivity.class.getSimpleName();
 
-    public static final String COMPLAINTS_TYPES = "complaints_types";
+    public static final String COMPLAINT = "complaint";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_complaint);
+        setContentView(R.layout.activity_listcomplaints);
 
         setSupportActionBar();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            List<ComplaintType> listComplaintsTypes = (List<ComplaintType>) bundle.getSerializable(COMPLAINTS_TYPES);
+            ComplaintType complaint = (ComplaintType) bundle.getSerializable(COMPLAINT);
 
-            if (listComplaintsTypes != null && listComplaintsTypes.size() > 0)
-                initUI(listComplaintsTypes);
+            if (complaint != null)
+                initUI(complaint);
         }
     }
 
@@ -51,19 +42,7 @@ public class ComplaintActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    protected void initUI(List<ComplaintType> listComplaintsTypes) {
-        RecyclerView mRecyclerList = (RecyclerView) findViewById(R.id.complaint_recycler);
-        mRecyclerList.setHasFixedSize(true);
-        mRecyclerList.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        mRecyclerList.setItemAnimator(new DefaultItemAnimator());
+    protected void initUI(ComplaintType complaint) {
 
-        RecyclerAdapter drawerAdapter = new RecyclerAdapter(listComplaintsTypes);
-        drawerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Dialogues.Toast(getBaseContext(), "Position: " + position, Toast.LENGTH_SHORT);
-            }
-        });
-        mRecyclerList.setAdapter(drawerAdapter);
     }
 }

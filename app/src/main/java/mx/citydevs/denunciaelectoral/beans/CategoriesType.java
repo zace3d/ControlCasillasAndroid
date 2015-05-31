@@ -10,7 +10,13 @@ import mx.citydevs.denunciaelectoral.R;
 public enum CategoriesType {
     CIUDADANO,
     FUNCIONARIO,
-    CANDIDATO;
+    CANDIDATO,
+    DEFAULT;
+
+    public static final int DEFAULT_ID = -1;
+    public static final int CIUDADANO_ID = 1;
+    public static final int FUNCIONARIO_ID = 2;
+    public static final int CANDIDATO_ID = 3;
 
     public static String getValue(CategoriesType type) {
         switch (type) {
@@ -35,6 +41,19 @@ public enum CategoriesType {
                 return R.drawable.ic_candidato;
             default:
                 return -1;
+        }
+    }
+
+    public static CategoriesType getCategoryFromId(int id) {
+        switch (id) {
+            case CIUDADANO_ID:
+                return CIUDADANO;
+            case FUNCIONARIO_ID:
+                return FUNCIONARIO;
+            case CANDIDATO_ID:
+                return CANDIDATO;
+            default:
+                return DEFAULT;
         }
     }
 
