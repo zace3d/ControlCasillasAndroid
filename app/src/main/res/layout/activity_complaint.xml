@@ -42,6 +42,7 @@
                 android:layout_marginRight="15dp">
 
                 <mx.citydevs.denunciaelectoral.views.CustomTextView
+                    android:id="@+id/complaint_tv_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/label_about"
@@ -59,7 +60,8 @@
                     android:layout_height="50dp"
                     android:layout_gravity="end"
                     android:background="@drawable/selector_item"
-                    android:src="@android:drawable/ic_menu_info_details" />
+                    android:src="@drawable/ic_menu_info"
+                    android:contentDescription="@string/app_name" />
             </LinearLayout>
 
             <mx.citydevs.denunciaelectoral.views.CustomTextView
@@ -72,11 +74,15 @@
                 android:padding="15dp"
                 app:typeface="Akkurat" />
 
-            <EditText
+            <mx.citydevs.denunciaelectoral.views.CustomEditText
+                android:id="@+id/complaint_et_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp" />
+                android:layout_marginRight="15dp"
+                android:maxLines="5"
+                android:inputType="textCapSentences|textMultiLine"
+                app:typeface="Akkurat"/>
 
             <RelativeLayout
                 android:id="@+id/complaint_btn_camera"
@@ -105,7 +111,32 @@
                     android:layout_alignTop="@+id/complaint_tv_camera"
                     android:layout_alignBottom="@+id/complaint_tv_camera"
                     android:layout_alignParentRight="true"
-                    android:src="@android:drawable/ic_menu_camera"/>
+                    android:src="@drawable/ic_menu_camera"
+                    android:contentDescription="@string/app_name" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/complaint_vg_image"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="200dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/complaint_iv_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:id="@+id/complaint_iv_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/selector_btn"
+                    android:src="@drawable/ic_menu_clear"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -116,10 +147,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <mx.citydevs.denunciaelectoral.views.CustomTextView
-                    android:id="@+id/complaint_btn_skip"
+                    android:id="@+id/complaint_btn_continue"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

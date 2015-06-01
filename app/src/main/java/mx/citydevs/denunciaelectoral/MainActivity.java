@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mToolbar.setTitle("");
         mToolbar.getBackground().setAlpha(255);
         CustomTextView actionbarTitle = (CustomTextView) mToolbar.findViewById(R.id.actionbar_title);
-        actionbarTitle.setText(getResources().getString(R.string.app_name));
+        actionbarTitle.setText(getString(R.string.app_name));
 
         setSupportActionBar(mToolbar);
     }

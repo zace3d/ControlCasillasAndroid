@@ -3,6 +3,9 @@
 
     <string name="about_name">Acerca</string>
 
+    <string name="complaint_name">El delito fue:</string>
+    <string name="complaint_preview_name">Tu denuncia:</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -17,7 +20,27 @@
     <string name="label_enter">CONTINUAR</string>
     <string name="label_about">Denuncia Electoral permite a cualquier votante en el país, enviar de manera confidencial, información sobre delitos electorales cometidos por candidatos o partidos, funcionarios electorales o ciudadanos en los lugares de votacióno en sus alrededores.</string>
 
-    <string name="label_more_info">Explica un poco más:</string>
+    <string name="label_camera">CÁMARA</string>
+    <string name="label_gallery">GALERÍA</string>
 
-    <string name="label_attach_image">Adjunta una imagen</string>
+    <string name="label_more_info">EXPLICA UN POCO MÁS:</string>
+    <string name="hint_more_info">Descripción</string>
+
+    <string name="label_attach_image">ADJUNTA UNA IMAGEN</string>
+
+    <string name="label_send_complaint">ENVIAR</string>
+
+    <string name="image_field_empty">Debes seleccionar una imagen</string>
+
+    <string name="label_onbackpressed">"Presiona botón de Atrás otra vez para salir"</string>
+
+    <!-- Validations EditText -->
+    <string name="edittext_emtpy">Campo vacío</string>
+    <string name="edittext_obligatorio">Obligatorio.</string>
+    <string name="edittext_wrong_info">Descripción vacía o con caracteres inválidos</string>
+    <string name="wrong_information">Información inválida</string>
+
+    <string name="edittext_error_string">Escribe letras validas [a-z A-Z].</string>
+    <string name="edittext_error_number">Escribe números validos [0&#8211;9].</string>
+    <string name="edittext_error_email">Escribe una sintaxis de correo valido.</string>
 </resources>

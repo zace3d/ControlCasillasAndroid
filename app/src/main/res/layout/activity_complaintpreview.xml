@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBgr">
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar"
+        android:layout_above="@+id/complaintpreview_btn_send">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp">
+
+            <mx.citydevs.denunciaelectoral.views.CustomTextView
+                android:id="@+id/complaintpreview_tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorAccent"
+                app:typeface="Akkurat" />
+
+            <ImageView
+                android:id="@+id/complaintpreview_iv_logo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="15dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/drawable_bgr_circle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@color/colorWhite">
+
+                <mx.citydevs.denunciaelectoral.views.CustomTextView
+                    android:id="@+id/complaintpreview_tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:paddingBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorAccent"
+                    app:typeface="Akkurat" />
+
+                <mx.citydevs.denunciaelectoral.views.CustomTextView
+                    android:id="@+id/complaintpreview_tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorBgrIcons"
+                    app:typeface="Akkurat" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/complaintpreview_iv_photo"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <mx.citydevs.denunciaelectoral.views.CustomTextView
+        android:id="@+id/complaintpreview_btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_send_complaint"
+        android:gravity="center"
+        android:background="@drawable/selector_btn"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignParentBottom="true"
+        android:padding="15dp"
+        android:textColor="@color/colorAccent"
+        app:typeface="Akkurat" />
+</RelativeLayout>

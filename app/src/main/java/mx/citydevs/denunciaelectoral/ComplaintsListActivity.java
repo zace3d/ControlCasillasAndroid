@@ -50,7 +50,7 @@ public class ComplaintsListActivity extends ActionBarActivity {
         mToolbar.setTitle("");
         mToolbar.getBackground().setAlpha(255);
         CustomTextView actionbarTitle = (CustomTextView) mToolbar.findViewById(R.id.actionbar_title);
-        actionbarTitle.setText(getResources().getString(R.string.app_name));
+        actionbarTitle.setText(getString(R.string.complaint_name));
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
