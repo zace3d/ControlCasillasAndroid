@@ -40,8 +40,12 @@ public class ComplaintsListActivity extends ActionBarActivity {
             listComplaintsTypes = (List<ComplaintType>) bundle.getSerializable(COMPLAINTS_TYPES);
             int categoryId = bundle.getInt(CATEGORY_ID);
 
-            if (listComplaintsTypes != null && listComplaintsTypes.size() > 0)
+            if (listComplaintsTypes != null && listComplaintsTypes.size() > 0) {
                 initUI(listComplaintsTypes, categoryId);
+            } else {
+                finish();
+                Dialogues.Toast(getBaseContext(), "No se encontraron denuncias en esa categoría", Toast.LENGTH_SHORT);
+            }
         }
     }
 

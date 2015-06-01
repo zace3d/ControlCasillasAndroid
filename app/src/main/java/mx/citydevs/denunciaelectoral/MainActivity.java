@@ -1,5 +1,6 @@
 package mx.citydevs.denunciaelectoral;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import mx.citydevs.denunciaelectoral.beans.CategoriesType;
 import mx.citydevs.denunciaelectoral.beans.ComplaintType;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
+import mx.citydevs.denunciaelectoral.httpconnection.NetworkUtils;
 import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
@@ -33,10 +36,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         setSupportActionBar();
-        initUI();
-
-        GetDenunciasTypesPublicationsAsyncTask task = new GetDenunciasTypesPublicationsAsyncTask();
-        task.execute();
+        loadComplaints();
     }
 
     protected void setSupportActionBar() {
@@ -55,7 +55,34 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         findViewById(R.id.main_btn_candidato).setOnClickListener(this);
     }
 
-    @Override
+    protected void loadComplaints() {
+        if (findViewById(R.id.main_btn_refresh).getVisibility() != View.GONE)
+            findViewById(R.id.main_btn_refresh).setVisibility(View.GONE);
+
+        if (findViewById(R.id.container).getVisibility() != View.VISIBLE)
+            findViewById(R.id.container).setVisibility(View.VISIBLE);
+
+        if (NetworkUtils.isNetworkConnectionAvailable(getBaseContext())) {
+            GetComplaintsTypesAsyncTask task = new GetComplaintsTypesAsyncTask();
+            task.execute();
+        } else {
+            setErrorMessage();
+            Dialogues.Toast(getBaseContext(), getString(R.string.no_internet_connection), Toast.LENGTH_SHORT);
+        }
+    }
+
+    protected void setErrorMessage() {
+        View view = findViewById(R.id.main_btn_refresh);
+        view.setOnClickListener(this);
+
+        if (view.getVisibility() != View.VISIBLE)
+            view.setVisibility(View.VISIBLE);
+
+        if (findViewById(R.id.container).getVisibility() != View.GONE)
+            findViewById(R.id.container).setVisibility(View.GONE);
+    }
+
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -75,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -89,43 +116,77 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.main_btn_candidato:
                 startListComplaintsIntent(CategoriesType.CANDIDATO_ID);
                 break;
+            case R.id.main_btn_refresh:
+                loadComplaints();
+                break;
             default:
+                break;
         }
     }
 
     protected void startListComplaintsIntent(int categoryId) {
         Intent intent = new Intent(getBaseContext(), ComplaintsListActivity.class);
-        intent.putExtra(ComplaintsListActivity.COMPLAINTS_TYPES, listComplaintsTypes);
+        intent.putExtra(ComplaintsListActivity.COMPLAINTS_TYPES, getFilterListComplaints(categoryId));
         intent.putExtra(ComplaintsListActivity.CATEGORY_ID, categoryId);
         startActivity(intent);
     }
 
-    private class GetDenunciasTypesPublicationsAsyncTask extends AsyncTask<String, String, String> {
-        public GetDenunciasTypesPublicationsAsyncTask() {}
+    protected ArrayList<ComplaintType> getFilterListComplaints(int categoryId) {
+        ArrayList<ComplaintType> listAux = new ArrayList<>();
+
+        for (ComplaintType complaintType : listComplaintsTypes) {
+            if (complaintType.getCategory() != null) {
+                if (complaintType.getCategory().getId() == categoryId) {
+                    listAux.add(complaintType);
+                }
+            }
+        }
+
+        return listAux;
+    }
+
+    private class GetComplaintsTypesAsyncTask extends AsyncTask<String, String, String> {
+        private ProgressDialog dialog;
+
+        public GetComplaintsTypesAsyncTask() {
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.setMessage("Obteniendo información...");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(true);
+            dialog.show();
+        }
 
         @Override
         protected void onPreExecute() {}
 
         @Override
         protected String doInBackground(String... params) {
-            return HttpConnection.POST(HttpConnection.URL + HttpConnection.TYPES);
+            return HttpConnection.POST(HttpConnection.URL + HttpConnection.TYPES, null);
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Dialogues.Log(TAG_CLASS, "Result: " + result, Log.INFO);
+            // Dialogues.Log(TAG_CLASS, "Result: " + result, Log.INFO);
 
             if (result != null) {
                 try {
                     listComplaintsTypes = (ArrayList<ComplaintType>) GsonParser.getListComplaintsTypesFromJSON(result);
 
                     if (listComplaintsTypes != null && listComplaintsTypes.size() > 0) {
-                        Dialogues.Toast(getBaseContext(), listComplaintsTypes.size() + " Result: " + result, Toast.LENGTH_LONG);
+                        // Dialogues.Toast(getBaseContext(), listComplaintsTypes.size() + " Result: " + result, Toast.LENGTH_LONG);
+                        initUI();
+                    } else {
+                        setErrorMessage();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else {
+                setErrorMessage();
             }
+
+            if (dialog != null && dialog.isShowing())
+                dialog.dismiss();
         }
     }
 }

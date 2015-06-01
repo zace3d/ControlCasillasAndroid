@@ -34,6 +34,10 @@
 
     <string name="label_onbackpressed">"Presiona botón de Atrás otra vez para salir"</string>
 
+    <string name="no_internet_connection">Sin conexión a Internet</string>
+
+    <string name="try_again">Inténtalo de nuevo</string>
+
     <!-- Validations EditText -->
     <string name="edittext_emtpy">Campo vacío</string>
     <string name="edittext_obligatorio">Obligatorio.</string>

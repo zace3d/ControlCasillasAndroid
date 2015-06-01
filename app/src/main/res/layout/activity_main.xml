@@ -10,10 +10,12 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/actionbar"
         android:orientation="vertical"
+        android:padding="15dp"
         android:layout_gravity="center_horizontal">
 
         <RelativeLayout
@@ -43,7 +45,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:padding="10dp"
                 android:textColor="@color/colorAccent"
-                app:typeface="Akkurat"/>
+                app:typeface="Akkurat" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -73,7 +75,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:padding="10dp"
                 android:textColor="@color/colorAccent"
-                app:typeface="Akkurat"/>
+                app:typeface="Akkurat" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -103,7 +105,39 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:padding="10dp"
                 android:textColor="@color/colorAccent"
-                app:typeface="Akkurat"/>
+                app:typeface="Akkurat" />
         </RelativeLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_btn_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar"
+        android:background="@drawable/selector_btn"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/main_tv_refresh"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/ic_refresh" />
+
+        <mx.citydevs.denunciaelectoral.views.CustomTextView
+            android:id="@+id/main_tv_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/try_again"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp"
+            android:textColor="@color/colorBgrIcons"
+            app:typeface="Akkurat" />
+    </RelativeLayout>
 </RelativeLayout>

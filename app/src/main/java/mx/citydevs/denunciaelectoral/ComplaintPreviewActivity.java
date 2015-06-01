@@ -1,18 +1,28 @@
 package mx.citydevs.denunciaelectoral;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import mx.citydevs.denunciaelectoral.beans.CategoriesType;
+import mx.citydevs.denunciaelectoral.beans.Complaint;
 import mx.citydevs.denunciaelectoral.beans.ComplaintType;
+import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
+import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
+import mx.citydevs.denunciaelectoral.httpconnection.NetworkUtils;
+import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
 /**
@@ -28,6 +38,7 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
     private ComplaintType complaint;
     private String description;
     private Bitmap bitmap;
+    private byte[] imageBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +52,7 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
             complaint = (ComplaintType) bundle.getSerializable(COMPLAINT);
             description = bundle.getString(DESCRIPTION);
 
-            byte[] imageBytes = bundle.getByteArray(IMAGE);
+            imageBytes = bundle.getByteArray(IMAGE);
             if (imageBytes != null) {
                 bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             }
@@ -105,6 +116,69 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
     }
 
     protected void sendComplaint() {
+        if (NetworkUtils.isNetworkConnectionAvailable(getBaseContext())) {
+            Complaint complaint = new Complaint();
+            complaint.setName("Anónimo");
+            complaint.setLastName("Anónimo");
+            complaint.setComplaintType(String.valueOf(this.complaint.getId()));
+            complaint.setContent(description);
+            complaint.setLatitude("19.432601");
+            complaint.setLongitude("-99.133222");
+            complaint.setPhone("12345678");
+            complaint.setUuid("12345-54321");
+            complaint.setIp("192.168.0.3");
+            complaint.setPicture(imageBytes);
 
+            PostComplaintAsyncTask task = new PostComplaintAsyncTask(complaint);
+            task.execute();
+        } else {
+            Dialogues.Toast(getBaseContext(), getString(R.string.no_internet_connection), Toast.LENGTH_SHORT);
+        }
+    }
+
+    private class PostComplaintAsyncTask extends AsyncTask<String, String, String> {
+        private ProgressDialog dialog;
+
+        private final Complaint complaint;
+
+        public PostComplaintAsyncTask(Complaint complaint) {
+            this.complaint = complaint;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(ComplaintPreviewActivity.this);
+            dialog.setMessage("Enviando denuncia...");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(true);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return HttpConnection.POST(HttpConnection.URL + HttpConnection.COMPLAINTS, this.complaint);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Dialogues.Log(TAG_CLASS, "Result: " + result, Log.INFO);
+
+            if (result != null) {
+                try {
+                    Dialogues.Toast(getBaseContext(), " Result: " + result, Toast.LENGTH_LONG);
+
+                    /*listComplaintsTypes = (ArrayList<ComplaintType>) GsonParser.getListComplaintsTypesFromJSON(result);
+
+                    if (listComplaintsTypes != null && listComplaintsTypes.size() > 0) {
+                        Dialogues.Toast(getBaseContext(), listComplaintsTypes.size() + " Result: " + result, Toast.LENGTH_LONG);
+                    }*/
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (dialog != null && dialog.isShowing())
+                dialog.dismiss();
+        }
     }
 }

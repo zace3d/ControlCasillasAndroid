@@ -12,12 +12,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
+import mx.citydevs.denunciaelectoral.beans.Complaint;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 
 /**
@@ -55,17 +59,37 @@ public class HttpConnection {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
-	public static String POST(String url) {
+	public static String POST(String url, Complaint complaint) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(url);
 		
 		String result = null;
 		
 		try {
+			if (complaint != null) {
+				// create a list to store HTTP variables and their values
+				List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+				// add an HTTP variable and value pair
+				nameValuePairs.add(new BasicNameValuePair("name", complaint.getName()));
+				nameValuePairs.add(new BasicNameValuePair("last_name", complaint.getLastName()));
+				nameValuePairs.add(new BasicNameValuePair("complaint_type", complaint.getComplaintType()));
+				nameValuePairs.add(new BasicNameValuePair("content", complaint.getContent()));
+				nameValuePairs.add(new BasicNameValuePair("latitude", complaint.getLatitude()));
+				nameValuePairs.add(new BasicNameValuePair("longitude", complaint.getLongitude()));
+				nameValuePairs.add(new BasicNameValuePair("phone", complaint.getPhone()));
+				nameValuePairs.add(new BasicNameValuePair("ip", complaint.getIp()));
+
+				// generate base64 string of image
+				String encodedImage = Base64.encodeToString(complaint.getPicture(), Base64.DEFAULT);
+				nameValuePairs.add(new BasicNameValuePair("picture", encodedImage));
+
+				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			}
+
 			//httpPost.setEntity(createStringEntity(json));
 		    //httpPost.setHeader("Accept", "application/json");
 		    //httpPost.setHeader("Content-Type", "application/json");
