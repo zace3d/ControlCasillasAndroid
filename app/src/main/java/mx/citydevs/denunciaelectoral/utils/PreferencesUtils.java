@@ -11,6 +11,7 @@ import java.io.File;
  */
 public class PreferencesUtils {
     public static final String ABOUT = "about";
+    public static final String LOCATION = "location";
 
     public static void putStringPreference(Context context, String key, String value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

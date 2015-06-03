@@ -2,25 +2,34 @@ package mx.citydevs.denunciaelectoral;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import mx.citydevs.denunciaelectoral.beans.CategoriesType;
 import mx.citydevs.denunciaelectoral.beans.ComplaintType;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
-import mx.citydevs.denunciaelectoral.httpconnection.NetworkUtils;
+import mx.citydevs.denunciaelectoral.location.LocationClientListener;
+import mx.citydevs.denunciaelectoral.utils.LocationUtils;
+import mx.citydevs.denunciaelectoral.utils.NetworkUtils;
 import mx.citydevs.denunciaelectoral.parser.GsonParser;
+import mx.citydevs.denunciaelectoral.utils.PreferencesUtils;
+import mx.citydevs.denunciaelectoral.utils.TelephonyUtils;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
 /**
@@ -28,7 +37,11 @@ import mx.citydevs.denunciaelectoral.views.CustomTextView;
  */
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public static final String TAG_CLASS = MainActivity.class.getSimpleName();
+
     private ArrayList<ComplaintType> listComplaintsTypes;
+
+    private LocationClientListener clientListener;
+    private LatLng userLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +49,32 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         setSupportActionBar();
+
         loadComplaints();
+
+        /*try {
+            InputStream inputStream = getAssets().open("ic_about.png");
+
+            String file = IOUtils.toString(inputStream, "UTF-8");
+            Dialogues.Log(TAG_CLASS, "PHONE ID: " + file, Log.ERROR);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        //Dialogues.Toast(getBaseContext(), "PHONE ID: " + TelephonyUtils.getDeviceId(getBaseContext()), Toast.LENGTH_SHORT);
+
+        if (LocationUtils.isGpsOrNetworkProviderEnabled(getBaseContext())) {
+            initLocationClientListener();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (clientListener != null && userLocation == null) {
+            startLocationListener();
+        }
     }
 
     protected void setSupportActionBar() {
@@ -53,6 +91,28 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         findViewById(R.id.main_btn_ciudadano).setOnClickListener(this);
         findViewById(R.id.main_btn_funcionario).setOnClickListener(this);
         findViewById(R.id.main_btn_candidato).setOnClickListener(this);
+    }
+
+    protected void initLocationClientListener() {
+        clientListener = new LocationClientListener(this);
+        clientListener.setOnLocationClientListener(new LocationClientListener.OnLocationClientListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                userLocation = LocationUtils.getLatLngFromLocation(location);
+
+                // Dialogues.Toast(getBaseContext(), "Location.", Toast.LENGTH_SHORT);
+
+                PreferencesUtils.putStringPreference(getApplication(),
+                        PreferencesUtils.LOCATION, userLocation.latitude + "," + userLocation.longitude);
+
+                clientListener.stopLocationUpdates();
+            }
+        });
+    }
+
+    public void startLocationListener() {
+        if (clientListener != null)
+            clientListener.connect();
     }
 
     protected void loadComplaints() {

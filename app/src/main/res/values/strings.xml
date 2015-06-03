@@ -35,6 +35,7 @@
     <string name="label_onbackpressed">"Presiona botón de Atrás otra vez para salir"</string>
 
     <string name="no_internet_connection">Sin conexión a Internet</string>
+    <string name="no_gps_enabled">Servicios de ubicación apagados. Debes encenderlos para obtener en dónde ocurrieron los hechos.</string>
 
     <string name="try_again">Inténtalo de nuevo</string>
 

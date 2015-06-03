@@ -71,6 +71,7 @@ public class HttpConnection {
                 httpPost.setEntity(createStringEntity(json));
                 httpPost.setHeader("Accept", "application/json");
                 httpPost.setHeader("Content-Type", "application/json");
+				//httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
             }
 
 			/*if (complaint != null) {
@@ -97,13 +98,13 @@ public class HttpConnection {
 			httpPost.setHeader("Authorization", authorizationString);
 
 			HttpResponse response = httpClient.execute(httpPost);
-			Dialogues.Log(TAG_CLASS, "Http Post Response:" + response.toString(), Log.DEBUG);
+			//Dialogues.Log(TAG_CLASS, "Http Post Response:" + response.toString(), Log.DEBUG);
 			
 			HttpEntity httpEntity = response.getEntity();
 
 			result = EntityUtils.toString(httpEntity, HTTP.UTF_8);
 			
-			Dialogues.Log(TAG_CLASS, result, Log.ERROR);
+			//Dialogues.Log(TAG_CLASS, result, Log.ERROR);
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
