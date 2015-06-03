@@ -84,6 +84,7 @@ public class ComplaintActivity extends ActionBarActivity implements View.OnClick
         findViewById(R.id.complaint_btn_continue).setOnClickListener(this);
 
         findViewById(R.id.complaint_iv_clear).setOnClickListener(this);
+        findViewById(R.id.complaint_iv_image).setOnClickListener(this);
 
         etDescription = (CustomEditText) findViewById(R.id.complaint_et_description);
         //etDescription.setRegexType(RegularExpressions.KEY_IS_TEXT);
@@ -125,6 +126,9 @@ public class ComplaintActivity extends ActionBarActivity implements View.OnClick
                 break;
             case R.id.complaint_iv_clear:
                 clearSelectedImage();
+                break;
+            case R.id.complaint_iv_image:
+                startImageViewerIntent();
                 break;
             default:
                 break;
@@ -208,6 +212,14 @@ public class ComplaintActivity extends ActionBarActivity implements View.OnClick
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bs);
         intent.putExtra(ComplaintPreviewActivity.IMAGE, bs.toByteArray());
         intent.putExtra(ComplaintPreviewActivity.DESCRIPTION, description);
+        startActivity(intent);
+    }
+
+    protected void startImageViewerIntent() {
+        Intent intent = new Intent(getBaseContext(), ImageViewerActivity.class);
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bs);
+        intent.putExtra(ComplaintPreviewActivity.IMAGE, bs.toByteArray());
         startActivity(intent);
     }
 }

@@ -8,14 +8,14 @@ import java.io.Serializable;
 public class Complaint implements Serializable {
     private String name;
     private String last_name;
-    private String complaint_type;
+    private int complaint_type;
     private String content;
     private String latitude;
     private String longitude;
     private String phone;
     private String uuid;
     private String ip;
-    private byte[] picture;
+    private String picture;
 
     public String getName() {
         return name;
@@ -33,11 +33,11 @@ public class Complaint implements Serializable {
         this.last_name = last_name;
     }
 
-    public String getComplaintType() {
+    public int getComplaintType() {
         return complaint_type;
     }
 
-    public void setComplaintType(String complaint_type) {
+    public void setComplaintType(int complaint_type) {
         this.complaint_type = complaint_type;
     }
 
@@ -89,11 +89,11 @@ public class Complaint implements Serializable {
         this.ip = ip;
     }
 
-    public byte[] getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 }

@@ -18,10 +18,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
-import mx.citydevs.denunciaelectoral.beans.Complaint;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 
 /**
@@ -63,14 +60,20 @@ public class HttpConnection {
 		return result;
 	}
 
-	public static String POST(String url, Complaint complaint) {
+	public static String POST(String url, String json) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(url);
 		
 		String result = null;
 		
 		try {
-			if (complaint != null) {
+            if (json != null) {
+                httpPost.setEntity(createStringEntity(json));
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-Type", "application/json");
+            }
+
+			/*if (complaint != null) {
 				// create a list to store HTTP variables and their values
 				List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
 				// add an HTTP variable and value pair
@@ -88,11 +91,7 @@ public class HttpConnection {
 				nameValuePairs.add(new BasicNameValuePair("picture", encodedImage));
 
 				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			}
-
-			//httpPost.setEntity(createStringEntity(json));
-		    //httpPost.setHeader("Accept", "application/json");
-		    //httpPost.setHeader("Content-Type", "application/json");
+			}*/
 
 			String authorizationString = getB64Auth("", "");
 			httpPost.setHeader("Authorization", authorizationString);

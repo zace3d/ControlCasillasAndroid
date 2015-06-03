@@ -180,6 +180,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    setErrorMessage();
                 }
             } else {
                 setErrorMessage();

@@ -7,12 +7,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -119,30 +125,47 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
         if (NetworkUtils.isNetworkConnectionAvailable(getBaseContext())) {
             Complaint complaint = new Complaint();
             complaint.setName("Anónimo");
-            complaint.setLastName("Anónimo");
-            complaint.setComplaintType(String.valueOf(this.complaint.getId()));
+            complaint.setLastName("Prueba");
+            complaint.setComplaintType((int) this.complaint.getId());
             complaint.setContent(description);
             complaint.setLatitude("19.432601");
             complaint.setLongitude("-99.133222");
             complaint.setPhone("12345678");
-            complaint.setUuid("12345-54321");
+            complaint.setUuid("de305d54-75b4-431b-adb2-eb6b9e546014");
             complaint.setIp("192.168.0.3");
-            complaint.setPicture(imageBytes);
+            //InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            //String picture = convertInputStreamToString(inputStream);
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            //complaint.setPicture(encodedImage);
 
-            PostComplaintAsyncTask task = new PostComplaintAsyncTask(complaint);
+            String json = GsonParser.createJsonFromObject(complaint);
+            Dialogues.Log(TAG_CLASS, "JSON: " + json, Log.ERROR);
+
+            PostComplaintAsyncTask task = new PostComplaintAsyncTask(json);
             task.execute();
         } else {
             Dialogues.Toast(getBaseContext(), getString(R.string.no_internet_connection), Toast.LENGTH_SHORT);
         }
     }
 
+    protected static String convertInputStreamToString(InputStream inputStream) {
+        String picture = null;
+        try {
+            picture = IOUtils.toString(inputStream, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return picture;
+    }
+
     private class PostComplaintAsyncTask extends AsyncTask<String, String, String> {
         private ProgressDialog dialog;
 
-        private final Complaint complaint;
+        private final String json;
 
-        public PostComplaintAsyncTask(Complaint complaint) {
-            this.complaint = complaint;
+        public PostComplaintAsyncTask(String json) {
+            this.json = json;
         }
 
         @Override
@@ -156,7 +179,7 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
 
         @Override
         protected String doInBackground(String... params) {
-            return HttpConnection.POST(HttpConnection.URL + HttpConnection.COMPLAINTS, this.complaint);
+            return HttpConnection.POST(HttpConnection.URL + HttpConnection.COMPLAINTS + "/", json);
         }
 
         @Override
