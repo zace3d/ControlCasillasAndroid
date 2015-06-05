@@ -39,6 +39,9 @@
 
     <string name="try_again">Inténtalo de nuevo</string>
 
+    <string name="error_try_again_response">Algo salió mal. Inténtalo de nuevo.</string>
+    <string name="success_response">Gracias por enviar tu denuncia.</string>
+
     <!-- Validations EditText -->
     <string name="edittext_emtpy">Campo vacío</string>
     <string name="edittext_obligatorio">Obligatorio.</string>

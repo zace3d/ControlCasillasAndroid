@@ -1,5 +1,6 @@
 package mx.citydevs.denunciaelectoral;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,6 +28,7 @@ public class ComplaintActivity extends ActionBarActivity implements View.OnClick
     public static final String TAG_CLASS = ComplaintsListActivity.class.getSimpleName();
 
     public static final int REQUEST_CODE_PICK_IMAGE = 5678;
+    public static final int REQUEST_CODE_COMPLAINT = 1234;
 
     public static final String COMPLAINT = "complaint";
     private ComplaintType complaint;
@@ -170,6 +172,10 @@ public class ComplaintActivity extends ActionBarActivity implements View.OnClick
             } else {
                 // Dialogues.Toast(getBaseContext(), "No hay imagen.", Toast.LENGTH_SHORT);
             }
+        } else if (requestCode == REQUEST_CODE_COMPLAINT) {
+            if (resultCode == Activity.RESULT_OK) {
+                finish();
+            }
         }
     }
 
@@ -212,7 +218,7 @@ public class ComplaintActivity extends ActionBarActivity implements View.OnClick
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bs);
         intent.putExtra(ComplaintPreviewActivity.IMAGE, bs.toByteArray());
         intent.putExtra(ComplaintPreviewActivity.DESCRIPTION, description);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_COMPLAINT);
     }
 
     protected void startImageViewerIntent() {

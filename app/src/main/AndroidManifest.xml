@@ -55,16 +55,15 @@
             android:parentActivityName="mx.citydevs.denunciaelectoral.ComplaintsListActivity"/>
 
         <activity
-            android:name=".ChooseImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Transparent" />
-
-        <activity
             android:name=".ComplaintPreviewActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Transparent"
             android:parentActivityName="mx.citydevs.denunciaelectoral.ComplaintActivity"/>
+
+        <activity
+            android:name=".ChooseImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
 
         <activity
             android:name=".ImageViewerActivity"

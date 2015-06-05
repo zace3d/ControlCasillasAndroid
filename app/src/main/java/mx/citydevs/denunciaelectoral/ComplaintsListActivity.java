@@ -1,5 +1,6 @@
 package mx.citydevs.denunciaelectoral;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -27,6 +28,8 @@ public class ComplaintsListActivity extends ActionBarActivity {
     public static final String COMPLAINTS_TYPES = "complaints_types";
     public static final String CATEGORY_ID = "category_id";
     private List<ComplaintType> listComplaintsTypes;
+
+    private static final int REQUEST_CODE = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

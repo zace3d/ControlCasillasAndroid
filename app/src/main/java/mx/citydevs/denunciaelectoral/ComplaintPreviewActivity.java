@@ -1,5 +1,6 @@
 package mx.citydevs.denunciaelectoral;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,10 +16,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -29,10 +37,11 @@ import mx.citydevs.denunciaelectoral.beans.ComplaintType;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
 import mx.citydevs.denunciaelectoral.location.LocationClientListener;
+import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.utils.LocationUtils;
 import mx.citydevs.denunciaelectoral.utils.NetworkUtils;
-import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.utils.PreferencesUtils;
+import mx.citydevs.denunciaelectoral.utils.TelephonyUtils;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
 /**
@@ -180,19 +189,22 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
             complaint.setContent(description);
             complaint.setLatitude(formatLocation(userLocation.latitude));
             complaint.setLongitude(formatLocation(userLocation.longitude));
-            complaint.setPhone("12345678");
-            complaint.setUuid("de305d54-75b4-431b-adb2-eb6b9e546014");
+            //complaint.setPhone("12345678");
+            complaint.setImei(TelephonyUtils.getDeviceId(getBaseContext()));
             complaint.setIp(NetworkUtils.getIPAddress(true));
-            InputStream inputStream = new ByteArrayInputStream(imageBytes);
-            String picture = convertInputStreamToString(inputStream);
-            //String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            complaint.setPicture(picture);
+            /*StringBuilder sb = new StringBuilder();
+            sb.append("data:image/jpg;base64,");
+            sb.append(Base64.encodeToString(imageBytes, Base64.DEFAULT));
+            String encodedImage = sb.toString();
+            complaint.setPicture(encodedImage);*/
+            complaint.setPicture(imageBytes);
 
-            String json = GsonParser.createJsonFromObject(complaint);
-            Dialogues.Log(TAG_CLASS, "JSON: " + json, Log.ERROR);
+            //String json = GsonParser.createJsonFromObject(complaint);
+            //Dialogues.Log(TAG_CLASS, "JSON: " + json, Log.ERROR);
 
-            PostComplaintAsyncTask task = new PostComplaintAsyncTask(json);
-            task.execute();
+            doPostImage(HttpConnection.URL + HttpConnection.COMPLAINTS + "/", complaint);
+            //PostComplaintAsyncTask task = new PostComplaintAsyncTask(complaint);
+            //task.execute();
         } else {
             Dialogues.Toast(getBaseContext(), getString(R.string.no_internet_connection), Toast.LENGTH_SHORT);
         }
@@ -203,24 +215,13 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
         return myFormatter.format(value);
     }
 
-    protected static String convertInputStreamToString(InputStream inputStream) {
-        String picture = null;
-        try {
-            picture = IOUtils.toString(inputStream, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return picture;
-    }
-
     private class PostComplaintAsyncTask extends AsyncTask<String, String, String> {
         private ProgressDialog dialog;
 
-        private final String json;
+        private final Complaint complaint;
 
-        public PostComplaintAsyncTask(String json) {
-            this.json = json;
+        public PostComplaintAsyncTask(Complaint complaint) {
+            this.complaint = complaint;
         }
 
         @Override
@@ -234,7 +235,7 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
 
         @Override
         protected String doInBackground(String... params) {
-            return HttpConnection.POST(HttpConnection.URL + HttpConnection.COMPLAINTS + "/", json);
+            return HttpConnection.POST(HttpConnection.URL + HttpConnection.COMPLAINTS + "/", complaint);
         }
 
         @Override
@@ -244,6 +245,7 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
             if (result != null) {
                 try {
                     Dialogues.Toast(getBaseContext(), " Result: " + result, Toast.LENGTH_LONG);
+                    Dialogues.Log(TAG_CLASS, "Result: " + result, Log.ERROR);
 
                     /*listComplaintsTypes = (ArrayList<ComplaintType>) GsonParser.getListComplaintsTypesFromJSON(result);
 
@@ -259,4 +261,65 @@ public class ComplaintPreviewActivity extends ActionBarActivity implements View.
                 dialog.dismiss();
         }
     }
+
+    private ProgressDialog dialog;
+    private void doPostImage(String url, Complaint complaint) {
+        dialog = new ProgressDialog(ComplaintPreviewActivity.this);
+        dialog.setMessage("Enviando denuncia...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
+        //String fileName = "/mnt/sdcard/IMG_.jpg";
+        //File myFile = new File(fileName);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setMaxRetriesAndTimeout(2, 0);
+        client.setBasicAuth(HttpConnection.username, HttpConnection.pwd);
+
+        RequestParams params = new RequestParams();
+        params.put("name", complaint.getName());
+        params.put("last_name", complaint.getLastName());
+        params.put("complaint_type", complaint.getComplaintType());
+        params.put("latitude", complaint.getLatitude());
+        params.put("longitude", complaint.getLongitude());
+        params.put("ip", complaint.getIp());
+        params.put("content", complaint.getContent());
+        try {
+            File tempFile = File.createTempFile("IMG_", ".jpg", null);
+            FileOutputStream fos = new FileOutputStream(tempFile);
+            fos.write(complaint.getPicture());
+
+            params.put("picture", tempFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Dialogues.Log(TAG_CLASS, "=======Json================" + new String(responseBody), Log.ERROR);
+                Dialogues.Toast(getBaseContext(), getString(R.string.success_response), Toast.LENGTH_LONG);
+
+                dismissDialog();
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Dialogues.Log(TAG_CLASS, "=======Error================" + new String(responseBody), Log.ERROR);
+                dismissDialog();
+                Dialogues.Toast(getBaseContext(), getString(R.string.error_try_again_response), Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+    protected void dismissDialog() {
+        if (dialog != null && dialog.isShowing())
+            dialog.dismiss();
+    }
 }
+

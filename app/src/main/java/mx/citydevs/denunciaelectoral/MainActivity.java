@@ -3,21 +3,17 @@ package mx.citydevs.denunciaelectoral;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
-import android.nfc.Tag;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import mx.citydevs.denunciaelectoral.beans.CategoriesType;
@@ -25,11 +21,10 @@ import mx.citydevs.denunciaelectoral.beans.ComplaintType;
 import mx.citydevs.denunciaelectoral.dialogues.Dialogues;
 import mx.citydevs.denunciaelectoral.httpconnection.HttpConnection;
 import mx.citydevs.denunciaelectoral.location.LocationClientListener;
+import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.utils.LocationUtils;
 import mx.citydevs.denunciaelectoral.utils.NetworkUtils;
-import mx.citydevs.denunciaelectoral.parser.GsonParser;
 import mx.citydevs.denunciaelectoral.utils.PreferencesUtils;
-import mx.citydevs.denunciaelectoral.utils.TelephonyUtils;
 import mx.citydevs.denunciaelectoral.views.CustomTextView;
 
 /**
@@ -51,17 +46,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setSupportActionBar();
 
         loadComplaints();
-
-        /*try {
-            InputStream inputStream = getAssets().open("ic_about.png");
-
-            String file = IOUtils.toString(inputStream, "UTF-8");
-            Dialogues.Log(TAG_CLASS, "PHONE ID: " + file, Log.ERROR);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        //Dialogues.Toast(getBaseContext(), "PHONE ID: " + TelephonyUtils.getDeviceId(getBaseContext()), Toast.LENGTH_SHORT);
 
         if (LocationUtils.isGpsOrNetworkProviderEnabled(getBaseContext())) {
             initLocationClientListener();
@@ -217,7 +201,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... params) {

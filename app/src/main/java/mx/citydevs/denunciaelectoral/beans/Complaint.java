@@ -1,21 +1,25 @@
 package mx.citydevs.denunciaelectoral.beans;
 
+import com.google.gson.annotations.Expose;
+
+import java.io.InputStream;
 import java.io.Serializable;
 
 /**
  * Created by zace3d on 5/31/15.
  */
 public class Complaint implements Serializable {
-    private String name;
-    private String last_name;
-    private int complaint_type;
-    private String content;
-    private String latitude;
-    private String longitude;
+    @Expose private String name;
+    @Expose private String last_name;
+    @Expose private int complaint_type;
+    @Expose private String content;
+    @Expose private String latitude;
+    @Expose private String longitude;
     private String phone;
     private String uuid;
-    private String ip;
-    private String picture;
+    @Expose private String imei;
+    @Expose private String ip;
+    private byte[] picture;
 
     public String getName() {
         return name;
@@ -81,6 +85,14 @@ public class Complaint implements Serializable {
         this.uuid = uuid;
     }
 
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
     public String getIp() {
         return ip;
     }
@@ -89,11 +101,11 @@ public class Complaint implements Serializable {
         this.ip = ip;
     }
 
-    public String getPicture() {
+    public byte[] getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(byte[] picture) {
         this.picture = picture;
     }
 }
